@@ -1,6 +1,9 @@
 package com.dev.abrigo.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "tb_shelter")
@@ -20,17 +23,27 @@ public class Shelter { //Abrigo
     private String email;
 
 
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) //Um abrigo pode ser varios animais
+    @JsonIgnoreProperties("shelter")
+    private List<Animal> animal;
+
+
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) //Um abrigo pode ser varios funcionario
+    @JsonIgnoreProperties("shelter")
+    private List<Employee> employees;
 
     public Shelter(){
 
     }
 
-    public Shelter(Long id, String name, String address, String phone, String email) {
+    public Shelter(Long id, String name, String address, String phone, String email, List<Animal> animal, List<Employee> employees) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.email = email;
+        this.animal = animal;
+        this.employees = employees;
     }
 
     public String getAddress() {
@@ -71,6 +84,22 @@ public class Shelter { //Abrigo
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Animal> getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(List<Animal> animal) {
+        this.animal = animal;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }
 
